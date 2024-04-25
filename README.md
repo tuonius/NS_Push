@@ -1,3 +1,5 @@
+### 演示
+- TG频道：[https://t.me/nans_wind](https://t.me/nans_wind)
 ### 简介
 - 使用NodeSeek论坛rss接口实现的定时抓取交易贴程序
 - 提供青龙面板部署教程，其他环境 举一反三
