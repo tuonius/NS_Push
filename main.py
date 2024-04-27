@@ -74,7 +74,7 @@ def fetch_and_send_data():
                 category = item.findtext("category")
                 category = str(category)
                 # if "trade" in category.strip().lower():
-                if "出" in title or "收" in title or "trade" in category.strip().lower():
+                if "出" in title or "收" in title or "trade" == category.strip().lower():
                     if not check_sent_guid(guid):
                         print(title, description, link, guid)
                         message = f"{description}\n----\n{link}"
