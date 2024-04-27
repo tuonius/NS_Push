@@ -66,8 +66,9 @@ def clean_old_guids():
 
 
 def fetch_and_send_data():
-    kw = get_keywords()
-    if not kw:
+    t_kwd = get_keywords("t_keywords")
+    d_kwd = get_keywords("d_keywords")
+    if not t_kwd or not d_kwd:
         return
     try:
         response = requests.get(rss_url, headers=headers)
@@ -88,7 +89,8 @@ def fetch_and_send_data():
                     continue
 
                 # if "trade" in category.strip().lower():
-                if any(keyword in title or keyword in category.strip().lower() for keyword in kw):
+                if (any(keyword in title or keyword in category.strip().lower() for keyword in t_kwd) or
+                        any(keyword in description for keyword in d_kwd)):
                     if not check_sent_guid(guid):
                         print(title, description, link, guid)
                         message = f"{description}\n----\n{link}"
@@ -105,18 +107,18 @@ def fetch_and_send_data():
         clean_old_guids()
 
 
-def get_keywords():
-    keywords_str = os.getenv("keywords")
+def get_keywords(variable_name):
+    keywords_str = os.getenv(variable_name)
 
     if keywords_str:
         # 尝试将字符串转换为列表
         try:
             keywords = ast.literal_eval(keywords_str)
         except ValueError as e:
-            print("环境变量 'keywords' 为空，请检查格式是否正确。正确示例 ['出', '收']", e)
+            print(f"环境变量 {variable_name} 为空，请检查格式是否正确。正确示例 ['出', '收']", e)
             keywords = []
     else:
-        print("环境变量 'keywords' 不存在.")
+        print(f"环境变量 {variable_name} 不存在.")
         keywords = []
     return keywords
 
