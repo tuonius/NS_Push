@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 from push import push_message
 import requests
 import xml.etree.ElementTree as ET
@@ -72,7 +72,14 @@ def fetch_and_send_data():
                 link = item.findtext("link")
                 guid = item.findtext("guid")
                 category = item.findtext("category")
+                pub_date = item.findtext("pubDate")
                 category = str(category)
+
+                pub_date = datetime.strptime(pub_date, "%a, %d %b %Y %H:%M:%S GMT")
+                pub_date_beijing = pub_date + timedelta(hours=8)
+                if 0 <= pub_date_beijing.hour < 7:
+                    continue
+
                 # if "trade" in category.strip().lower():
                 if "出" in title or "收" in title or "trade" == category.strip().lower():
                     if not check_sent_guid(guid):
