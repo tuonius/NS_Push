@@ -1,4 +1,7 @@
+import ast
+import os
 import sqlite3
+import sys
 from datetime import datetime, timedelta
 from push import push_message
 import requests
@@ -6,9 +9,6 @@ import xml.etree.ElementTree as ET
 import re
 import traceback
 
-
-# 自定义关键词列表
-keywords = ["出", "收", "trade"]
 
 rss_url = "https://rss.nodeseek.com/"
 
@@ -66,6 +66,9 @@ def clean_old_guids():
 
 
 def fetch_and_send_data():
+    kw = get_keywords()
+    if not kw:
+        return
     try:
         response = requests.get(rss_url, headers=headers)
         if response.status_code == 200:
@@ -85,7 +88,7 @@ def fetch_and_send_data():
                     continue
 
                 # if "trade" in category.strip().lower():
-                if any(keyword in title or keyword in category.strip().lower() for keyword in keywords):
+                if any(keyword in title or keyword in category.strip().lower() for keyword in kw):
                     if not check_sent_guid(guid):
                         print(title, description, link, guid)
                         message = f"{description}\n----\n{link}"
@@ -100,6 +103,22 @@ def fetch_and_send_data():
         push_message("NodeSeek Error", str(e))
     finally:
         clean_old_guids()
+
+
+def get_keywords():
+    keywords_str = os.getenv("keywords")
+
+    if keywords_str:
+        # 尝试将字符串转换为列表
+        try:
+            keywords = ast.literal_eval(keywords_str)
+        except ValueError as e:
+            print("环境变量 'keywords' 为空，请检查格式是否正确。正确示例 ['出', '收']", e)
+            keywords = []
+    else:
+        print("环境变量 'keywords' 不存在.")
+        keywords = []
+    return keywords
 
 
 if __name__ == "__main__":
