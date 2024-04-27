@@ -6,6 +6,10 @@ import xml.etree.ElementTree as ET
 import re
 import traceback
 
+
+# 自定义关键词列表
+keywords = ["出", "收", "trade"]
+
 rss_url = "https://rss.nodeseek.com/"
 
 headers = {
@@ -81,7 +85,7 @@ def fetch_and_send_data():
                     continue
 
                 # if "trade" in category.strip().lower():
-                if "出" in title or "收" in title or "trade" == category.strip().lower():
+                if any(keyword in title or keyword in category.strip().lower() for keyword in keywords):
                     if not check_sent_guid(guid):
                         print(title, description, link, guid)
                         message = f"{description}\n----\n{link}"
