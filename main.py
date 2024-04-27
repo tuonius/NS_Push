@@ -73,16 +73,16 @@ def fetch_and_send_data():
                 guid = item.findtext("guid")
                 category = item.findtext("category")
                 category = str(category)
-                if "trade" in category.strip().lower():
-                    if "出" in title or "收" in title:
-                        if not check_sent_guid(guid):
-                            print(title, description, link, guid)
-                            message = f"{description}\n----\n{link}"
-                            username = extract_telegram_username(str(description))
-                            if username:
-                                message += f"\nTG: https://t.me/{username}"
-                            push_message(title, message)
-                            save_sent_guid(guid)
+                # if "trade" in category.strip().lower():
+                if "出" in title or "收" in title or "trade" in category.strip().lower():
+                    if not check_sent_guid(guid):
+                        print(title, description, link, guid)
+                        message = f"{description}\n----\n{link}"
+                        username = extract_telegram_username(str(description))
+                        if username:
+                            message += f"\nTG: https://t.me/{username}"
+                        push_message(title, message)
+                        save_sent_guid(guid)
     except Exception as e:
         print("Error:", e)
         traceback.print_exc()
