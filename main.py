@@ -68,6 +68,7 @@ def clean_old_guids():
 def fetch_and_send_data():
     t_kwd = get_keywords("t_keywords")
     d_kwd = get_keywords("d_keywords")
+    b_kwd = get_keywords("b_keywords")
     if not t_kwd or not d_kwd:
         return
     try:
@@ -87,6 +88,10 @@ def fetch_and_send_data():
                 pub_date_beijing = pub_date + timedelta(hours=8)
                 if 0 <= pub_date_beijing.hour < 7:
                     continue
+
+                if not b_kwd:
+                    if any(keyword in title or keyword in description for keyword in b_kwd):
+                        continue
 
                 send_flag = False
                 if any(keyword in title or keyword in category.strip().lower() for keyword in t_kwd):
