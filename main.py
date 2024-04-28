@@ -89,8 +89,9 @@ def fetch_and_send_data():
                 if 0 <= pub_date_beijing.hour < 7:
                     continue
 
-                if not b_kwd:
+                if b_kwd:
                     if any(keyword in title or keyword in description for keyword in b_kwd):
+                        print("hello,")
                         continue
 
                 send_flag = False
