@@ -89,7 +89,10 @@ def fetch_and_send_data():
                 if 0 <= pub_date_beijing.hour < 7:
                     continue
 
-                if b_kwd and title is not None and description is not None and description.strip != "":
+                if b_kwd and title is not None:
+                    if any(keyword in title or keyword in description for keyword in b_kwd):
+                        continue
+                if description is not None and description.strip != "":
                     if any(keyword in title or keyword in description for keyword in b_kwd):
                         continue
 
