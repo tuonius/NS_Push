@@ -88,9 +88,13 @@ def fetch_and_send_data():
                 if 0 <= pub_date_beijing.hour < 7:
                     continue
 
-                # if "trade" in category.strip().lower():
-                if (any(keyword in title or keyword in category.strip().lower() for keyword in t_kwd) or
-                        any(keyword in description for keyword in d_kwd)):
+                send_flag = False
+                if any(keyword in title or keyword in category.strip().lower() for keyword in t_kwd):
+                    send_flag = True
+                elif description is not None and description.strip() != "":
+                    if any(keyword in description for keyword in d_kwd):
+                        send_flag = True
+                if send_flag:
                     if not check_sent_guid(guid):
                         print(title, description, link, guid)
                         message = f"{description}\n----\n{link}"
