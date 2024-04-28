@@ -90,10 +90,10 @@ def fetch_and_send_data():
                     continue
 
                 if b_kwd and title is not None:
-                    if any(keyword in title or keyword in description for keyword in b_kwd):
+                    if any(keyword in title for keyword in b_kwd):
                         continue
-                if description is not None and description.strip != "":
-                    if any(keyword in title or keyword in description for keyword in b_kwd):
+                if b_kwd and description is not None and description.strip != "":
+                    if any(word in description for word in b_kwd):
                         continue
 
                 send_flag = False
