@@ -4,6 +4,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from notify import send
+
 headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7",
@@ -23,32 +24,31 @@ headers = {
 }
 if __name__ == '__main__':
     url = "https://clients.zgovps.com/index.php?/cart/special-offer/"
-    while True:
-        try:
-            response = requests.get(url, headers=headers)
-            soup = BeautifulSoup(response.text, 'html.parser')
+    try:
+        response = requests.get(url, headers=headers)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-            products = soup.find_all('div', class_='col-md-6 col-12 mt-4')
+        products = soup.find_all('div', class_='col-md-6 col-12 mt-4')
 
-            for product in products:
-                product_name = product.find('strong').text.strip()
-                price_element = product.select_one('select[name="cycle"] option')
-                price = price_element.text.strip()
-                stock_button = product.select_one('button.btn')
-                stock = "Out of stock!" if stock_button.text.strip() == "Out of stock!" else "In stock"
-                last_li = product.find_all('div', class_='my-3')[0].find_all('li')[-1].text.strip()
-                # print("产品名:", product_name)
-                print(f"{last_li} | {price} | {stock}")
-                # print("品名:", last_li)
-                # print("价格:", price)
-                # print("库存:", stock)
-                if stock == "In stock" and price != "$52.00 USD 年付":
-                    print("开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
-                    send("活动开始了", "开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
-                    sys.exit()
-                print("休眠1秒钟...")
-                print()
-            time.sleep(1)
-        except Exception as e:
-            send("抢购脚本出错了", f"{str(e)}")
-            print(str(e))
+        for product in products:
+            product_name = product.find('strong').text.strip()
+            price_element = product.select_one('select[name="cycle"] option')
+            price = price_element.text.strip()
+            stock_button = product.select_one('button.btn')
+            stock = "Out of stock!" if stock_button.text.strip() == "Out of stock!" else "In stock"
+            last_li = product.find_all('div', class_='my-3')[0].find_all('li')[-1].text.strip()
+            # print("产品名:", product_name)
+            print(f"{last_li} | {price} | {stock}")
+            # print("品名:", last_li)
+            # print("价格:", price)
+            # print("库存:", stock)
+            if stock == "In stock" and price != "$52.00 USD 年付":
+                print("开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
+                send("活动开始了", "开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
+                sys.exit()
+            print("休眠1秒钟...")
+            print()
+        time.sleep(1)
+    except Exception as e:
+        send("抢购脚本出错了", f"{str(e)}")
+        print(str(e))
