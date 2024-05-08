@@ -48,6 +48,7 @@ def insert_product_info(name, price, stock):
     try:
         cursor.execute('''INSERT INTO products (name, price, stock) VALUES (?, ?, ?)''', (name, price, stock))
         conn.commit()
+        push_message("新增促销商品：", f"套餐名：{name}\n价格:{price}库存{stock}")
     except sqlite3.IntegrityError:
         # 如果产品已存在，则忽略
         pass
