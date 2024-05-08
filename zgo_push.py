@@ -45,8 +45,6 @@ if __name__ == '__main__':
             if stock == "In stock" and price != "$52.00 USD 年付":
                 print("开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
                 send("活动开始了", "开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
-                sys.exit()
-            print("休眠1秒钟...")
             print()
         time.sleep(1)
     except Exception as e:
