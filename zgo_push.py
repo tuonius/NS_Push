@@ -3,7 +3,7 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
-from notify import send
+from push import push_message
 
 headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -44,9 +44,9 @@ if __name__ == '__main__':
             # print("库存:", stock)
             if stock == "In stock" and price != "$52.00 USD 年付":
                 print("开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
-                send("活动开始了", "开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
+                push_message("活动开始了", "开始抢购吧!\nhttps://clients.zgovps.com/index.php?/cart/special-offer/")
             print()
         time.sleep(1)
     except Exception as e:
-        send("抢购脚本出错了", f"{str(e)}")
+        push_message("抢购脚本出错了", f"{str(e)}")
         print(str(e))
